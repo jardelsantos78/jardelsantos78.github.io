@@ -2,7 +2,7 @@
 
 Este repositório hospeda meu site pessoal via GitHub Pages.
 
-🔗 https://jardelsantos78.github.io
+🔗 https://jardelsantos.github.io
 
 Conteúdo focado em:
 - Segurança da Informação
