@@ -100,99 +100,83 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-document.addEventListener('DOMContentLoaded', () => {
+// --- CARROSSEL DE CASOS DE SUCESSO (Versão Desktop + Mobile) ---
+const casesTrack = document.getElementById('casesTrack');
+const casesDotsContainer = document.getElementById('casesDots');
 
-    // --- 3. CARROSSEL DE CASOS DE SUCESSO (Versão Desktop + Mobile) ---
-    const casesTrack = document.getElementById('casesTrack');
-    const casesDotsContainer = document.getElementById('casesDots');
+if (casesTrack && casesDotsContainer) {
+    const cards = Array.from(casesTrack.children);
+    let currentIndex = 0;
+    let isPaused = false;
 
-    if (casesTrack && casesDotsContainer) {
-        const cards = Array.from(casesTrack.children);
-        let currentIndex = 0;
-        let isPaused = false;
-        
-        // Variáveis para Touch
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        function getItemsPerView() {
-            return window.innerWidth <= 992 ? 1 : 3;
-        }
-
-        function setupCasesDots() {
-            casesDotsContainer.innerHTML = '';
-            const itemsPerView = getItemsPerView();
-            const totalSteps = cards.length - itemsPerView + 1;
-
-            for (let i = 0; i < totalSteps; i++) {
-                const dot = document.createElement('div');
-                dot.classList.add('dot');
-                if (i === 0) dot.classList.add('active');
-                dot.addEventListener('click', () => {
-                    currentIndex = i;
-                    updateCasesCarousel();
-                    isPaused = true;
-                });
-                casesDotsContainer.appendChild(dot);
-            }
-        }
-
-        function updateCasesCarousel() {
-            const isMobile = window.innerWidth <= 992;
-            const cardWidth = cards[0].getBoundingClientRect().width;
-            const gap = isMobile ? 0 : 20; 
-            const moveAmount = (cardWidth + gap) * currentIndex;
-            
-            casesTrack.style.transform = `translateX(-${moveAmount}px)`;
-            
-            const dots = casesDotsContainer.querySelectorAll('.dot');
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentIndex);
-            });
-        }
-
-        // Lógica de Swipe para Casos de Sucesso
-        casesTrack.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-            isPaused = true;
-        }, {passive: true});
-
-        casesTrack.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            const threshold = 50;
-            const itemsPerView = getItemsPerView();
-            const totalSteps = cards.length - itemsPerView + 1;
-
-            if (touchStartX - touchEndX > threshold) { // Deslize para esquerda
-                if (currentIndex < totalSteps - 1) currentIndex++;
-            } else if (touchEndX - touchStartX > threshold) { // Deslize para direita
-                if (currentIndex > 0) currentIndex--;
-            }
-            updateCasesCarousel();
-        }, {passive: true});
-
-        let autoPlay = setInterval(() => {
-            if (!isPaused) {
-                const itemsPerView = getItemsPerView();
-                const totalSteps = cards.length - itemsPerView + 1;
-                currentIndex = (currentIndex + 1) % totalSteps;
-                updateCasesCarousel();
-            }
-        }, 6000);
-
-        casesTrack.addEventListener('mouseenter', () => isPaused = true);
-        casesTrack.addEventListener('mouseleave', () => isPaused = false);
-
-        window.addEventListener('resize', () => {
-            currentIndex = 0;
-            setupCasesDots();
-            updateCasesCarousel();
-        });
-
-        setupCasesDots();
+    function getItemsPerView() {
+        return window.innerWidth <= 992 ? 1 : 3; // 1 no mobile, 3 no desktop
     }
 
-    // --- 4. CARROSSEL DE CERTIFICAÇÕES (sobre.html / certificações) ---
+    function setupCasesDots() {
+        casesDotsContainer.innerHTML = '';
+        const itemsPerView = getItemsPerView();
+        // Calcula quantos "pousos" o carrossel tem
+        const totalSteps = cards.length - itemsPerView + 1;
+
+        for (let i = 0; i < totalSteps; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                currentIndex = i;
+                updateCasesCarousel();
+                isPaused = true;
+            });
+            casesDotsContainer.appendChild(dot);
+        }
+    }
+
+	function updateCasesCarousel() {
+		const isMobile = window.innerWidth <= 992;
+		const cardWidth = cards[0].getBoundingClientRect().width;
+		
+		// No mobile o gap deve ser 0 para centralizar perfeitamente
+		const gap = isMobile ? 0 : 20; 
+		
+		// Cálculo do deslocamento
+		const moveAmount = (cardWidth + gap) * currentIndex;
+		
+		casesTrack.style.transform = `translateX(-${moveAmount}px)`;
+		
+		// Atualiza os dots (mantendo o estado ativo maior)
+		const dots = casesDotsContainer.querySelectorAll('.dot');
+		dots.forEach((dot, i) => {
+			dot.classList.toggle('active', i === currentIndex);
+		});
+	}
+
+    // Auto-play unificado
+    let autoPlay = setInterval(() => {
+        if (!isPaused) {
+            const itemsPerView = getItemsPerView();
+            const totalSteps = cards.length - itemsPerView + 1;
+            currentIndex = (currentIndex + 1) % totalSteps;
+            updateCasesCarousel();
+        }
+    }, 6000);
+
+    // Pausar ao interagir (Mouse ou Touch)
+    casesTrack.addEventListener('mouseenter', () => isPaused = true);
+    casesTrack.addEventListener('mouseleave', () => isPaused = false);
+    casesTrack.addEventListener('touchstart', () => isPaused = true);
+
+    window.addEventListener('resize', () => {
+        currentIndex = 0; // Reseta ao mudar tela para evitar erros de cálculo
+        setupCasesDots();
+        updateCasesCarousel();
+    });
+
+    // Inicialização
+    setupCasesDots();
+}
+
+// --- 4. CARROSSEL DE CERTIFICAÇÕES (sobre.html / certificações) ---
     const certTrack = document.getElementById('certGrid');
     const certDotsContainer = document.getElementById('certDots');
 
@@ -202,12 +186,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let certPaused = false;
         let certAutoPlay;
 
-        // Variáveis para Touch Certificações
-        let certTouchStartX = 0;
-        let certTouchEndX = 0;
+        function getCertItemsPerView() {
+            return window.innerWidth <= 992 ? 1 : 3; // 1 no mobile, 3 no desktop (ajuste conforme seu grid)
+        }
 
         function setupCertDots() {
             certDotsContainer.innerHTML = '';
+            // No mobile, criamos um ponto para cada certificado
             if (window.innerWidth <= 992) {
                 certs.forEach((_, i) => {
                     const dot = document.createElement('div');
@@ -216,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     dot.addEventListener('click', () => {
                         certIndex = i;
                         updateCertCarousel();
-                        certPaused = true;
+                        certPaused = true; // Pausa ao interagir manualmente
                     });
                     certDotsContainer.appendChild(dot);
                 });
@@ -225,34 +210,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function updateCertCarousel() {
             if (window.innerWidth <= 992) {
+                // No mobile, move 100% (um card por vez)
                 certTrack.style.transform = `translateX(-${certIndex * 100}%)`;
+                
+                // Atualiza dots
                 const dots = certDotsContainer.querySelectorAll('.dot');
                 dots.forEach((dot, i) => {
                     dot.classList.toggle('active', i === certIndex);
                 });
             } else {
+                // No desktop, remove o transform para manter o grid padrão
                 certTrack.style.transform = 'none';
             }
         }
 
-        // Lógica de Swipe para Certificações
-        certTrack.addEventListener('touchstart', (e) => {
-            certTouchStartX = e.changedTouches[0].screenX;
-            certPaused = true;
-        }, {passive: true});
-
-        certTrack.addEventListener('touchend', (e) => {
-            certTouchEndX = e.changedTouches[0].screenX;
-            const threshold = 50;
-
-            if (certTouchStartX - certTouchEndX > threshold) { // Deslize para esquerda
-                if (certIndex < certs.length - 1) certIndex++;
-            } else if (certTouchEndX - certTouchStartX > threshold) { // Deslize para direita
-                if (certIndex > 0) certIndex--;
-            }
-            updateCertCarousel();
-        }, {passive: true});
-
+        // Função de Auto-play para Certificações
         function startCertAutoPlay() {
             clearInterval(certAutoPlay);
             certAutoPlay = setInterval(() => {
@@ -260,9 +232,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     certIndex = (certIndex + 1) % certs.length;
                     updateCertCarousel();
                 }
-            }, 4000);
+            }, 4000); // Passa a cada 4 segundos
         }
 
+        // Eventos para pausar (Mouse e Touch)
+        certTrack.addEventListener('touchstart', () => certPaused = true);
         certTrack.addEventListener('mouseenter', () => certPaused = true);
         certTrack.addEventListener('mouseleave', () => certPaused = false);
 
@@ -272,9 +246,11 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCertCarousel();
         });
 
+        // Inicialização
         setupCertDots();
         startCertAutoPlay();
     }
+
 });
 
 
