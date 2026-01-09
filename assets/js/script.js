@@ -1,6 +1,7 @@
 /**
- * Script Consolidado - Jardel Santos
- * Abrange: Index, Sobre, Serviços, Artigos e Páginas de Conteúdo
+ * Script Consolidado e Otimizado - Jardel Santos
+ * Inclui: Menu Mobile, Carrossel de Destaques, Casos de Sucesso e Certificações
+ * Funcionalidades: Auto-play, Pausa na interação e Suporte a Touch (Swipe)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -14,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
             navLinks.classList.toggle('active');
         });
         
-        // Fecha o menu ao clicar em um link (útil para links com âncoras #)
         const links = navLinks.querySelectorAll('a');
         links.forEach(link => {
             link.addEventListener('click', () => {
@@ -27,13 +27,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const track = document.getElementById('carouselTrack');
     if (track) {
         const slides = Array.from(track.children);
+        const dotsContainer = document.getElementById('carouselDots');
         const nextButton = document.getElementById('nextBtn');
         const prevButton = document.getElementById('prevBtn');
-        const dotsContainer = document.getElementById('carouselDots');
         let currentSlideIndex = 0;
+        let autoPlayInterval;
+        let touchStartX = 0;
+        let touchEndX = 0;
 
-        // Limpeza e criação de dots
-        if (dotsContainer) {
+        function setupDots() {
+            if (!dotsContainer) return;
             dotsContainer.innerHTML = '';
             slides.forEach((_, index) => {
                 const dot = document.createElement('div');
@@ -45,9 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function updateDots(index) {
-            const dots = document.querySelectorAll('.dot');
-            dots.forEach(d => d.classList.remove('active'));
-            if(dots[index]) dots[index].classList.add('active');
+            const dots = dotsContainer?.querySelectorAll('.dot');
+            dots?.forEach((d, i) => d.classList.toggle('active', i === index));
         }
 
         function moveToSlide(index) {
@@ -58,200 +60,149 @@ document.addEventListener('DOMContentLoaded', () => {
             updateDots(index);
         }
 
-        if (nextButton) nextButton.addEventListener('click', () => moveToSlide(currentSlideIndex + 1));
-        if (prevButton) prevButton.addEventListener('click', () => moveToSlide(currentSlideIndex - 1));
+        function startAutoPlay() {
+            stopAutoPlay();
+            autoPlayInterval = setInterval(() => moveToSlide(currentSlideIndex + 1), 6000);
+        }
 
-        // Auto-play
-        let autoPlay = setInterval(() => moveToSlide(currentSlideIndex + 1), 6000);
-        track.addEventListener('mouseenter', () => clearInterval(autoPlay));
-        track.addEventListener('mouseleave', () => {
-            autoPlay = setInterval(() => moveToSlide(currentSlideIndex + 1), 6000);
-        });
-    }
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
 
-    // --- 3. SCROLL DE CERTIFICAÇÕES E CARDS (Páginas Diversas) ---
-    // Atua em .certifications-grid ou .article-grid se houver id certDots
-    const grid = document.querySelector('.certifications-grid') || document.querySelector('.article-grid');
-    const dotsNav = document.getElementById('certDots');
+        // Lógica de Swipe (Dedo)
+        track.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+            stopAutoPlay();
+        }, {passive: true});
 
-    if (grid && dotsNav) {
-        const cards = grid.children;
+        track.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            const threshold = 50;
+            if (touchStartX - touchEndX > threshold) moveToSlide(currentSlideIndex + 1);
+            else if (touchEndX - touchStartX > threshold) moveToSlide(currentSlideIndex - 1);
+            startAutoPlay();
+        }, {passive: true});
+
+        if (nextButton) nextButton.addEventListener('click', () => { moveToSlide(currentSlideIndex + 1); startAutoPlay(); });
+        if (prevButton) prevButton.addEventListener('click', () => { moveToSlide(currentSlideIndex - 1); startAutoPlay(); });
         
-        // Gera dots dinamicamente
-        Array.from(cards).forEach((_, i) => {
-            const dot = document.createElement('div');
-            dot.classList.add('dot');
-            if (i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => {
-                const gap = 20;
-                const scrollPos = i * (cards[0].offsetWidth + gap);
-                grid.scrollTo({ left: scrollPos, behavior: 'smooth' });
-            });
-            dotsNav.appendChild(dot);
-        });
+        track.addEventListener('mouseenter', stopAutoPlay);
+        track.addEventListener('mouseleave', startAutoPlay);
 
-        // Sincroniza dots com o scroll manual
-        grid.addEventListener('scroll', () => {
-            const gap = 20;
-            const index = Math.round(grid.scrollLeft / (cards[0].offsetWidth + gap));
-            const dots = dotsNav.querySelectorAll('.dot');
-            dots.forEach((d, i) => d.classList.toggle('active', i === index));
-        });
+        setupDots();
+        startAutoPlay();
     }
 
+    // --- 3. CARROSSEL DE CASOS DE SUCESSO ---
+    const casesTrack = document.getElementById('casesTrack');
+    const casesDotsContainer = document.getElementById('casesDots');
 
-// --- CARROSSEL DE CASOS DE SUCESSO (Versão Desktop + Mobile) ---
-const casesTrack = document.getElementById('casesTrack');
-const casesDotsContainer = document.getElementById('casesDots');
+    if (casesTrack && casesDotsContainer) {
+        const cards = Array.from(casesTrack.children);
+        let currentIndex = 0;
+        let isPaused = false;
+        let tStartX = 0;
+        let tEndX = 0;
 
-if (casesTrack && casesDotsContainer) {
-    const cards = Array.from(casesTrack.children);
-    let currentIndex = 0;
-    let isPaused = false;
+        const getItemsPerView = () => window.innerWidth <= 992 ? 1 : 3;
 
-    function getItemsPerView() {
-        return window.innerWidth <= 992 ? 1 : 3; // 1 no mobile, 3 no desktop
-    }
-
-    function setupCasesDots() {
-        casesDotsContainer.innerHTML = '';
-        const itemsPerView = getItemsPerView();
-        // Calcula quantos "pousos" o carrossel tem
-        const totalSteps = cards.length - itemsPerView + 1;
-
-        for (let i = 0; i < totalSteps; i++) {
-            const dot = document.createElement('div');
-            dot.classList.add('dot');
-            if (i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => {
-                currentIndex = i;
-                updateCasesCarousel();
-                isPaused = true;
-            });
-            casesDotsContainer.appendChild(dot);
+        function setupCasesDots() {
+            casesDotsContainer.innerHTML = '';
+            const totalSteps = cards.length - getItemsPerView() + 1;
+            for (let i = 0; i < totalSteps; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => { currentIndex = i; updateCasesCarousel(); isPaused = true; });
+                casesDotsContainer.appendChild(dot);
+            }
         }
-    }
 
-	function updateCasesCarousel() {
-		const isMobile = window.innerWidth <= 992;
-		const cardWidth = cards[0].getBoundingClientRect().width;
-		
-		// No mobile o gap deve ser 0 para centralizar perfeitamente
-		const gap = isMobile ? 0 : 20; 
-		
-		// Cálculo do deslocamento
-		const moveAmount = (cardWidth + gap) * currentIndex;
-		
-		casesTrack.style.transform = `translateX(-${moveAmount}px)`;
-		
-		// Atualiza os dots (mantendo o estado ativo maior)
-		const dots = casesDotsContainer.querySelectorAll('.dot');
-		dots.forEach((dot, i) => {
-			dot.classList.toggle('active', i === currentIndex);
-		});
-	}
+        function updateCasesCarousel() {
+            const isMobile = window.innerWidth <= 992;
+            const cardWidth = cards[0].getBoundingClientRect().width;
+            const gap = isMobile ? 0 : 20; 
+            casesTrack.style.transform = `translateX(-${(cardWidth + gap) * currentIndex}px)`;
+            const dots = casesDotsContainer.querySelectorAll('.dot');
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+        }
 
-    // Auto-play unificado
-    let autoPlay = setInterval(() => {
-        if (!isPaused) {
-            const itemsPerView = getItemsPerView();
-            const totalSteps = cards.length - itemsPerView + 1;
-            currentIndex = (currentIndex + 1) % totalSteps;
+        // Swipe para Casos de Sucesso
+        casesTrack.addEventListener('touchstart', e => { tStartX = e.changedTouches[0].screenX; isPaused = true; }, {passive: true});
+        casesTrack.addEventListener('touchend', e => {
+            tEndX = e.changedTouches[0].screenX;
+            const steps = cards.length - getItemsPerView() + 1;
+            if (tStartX - tEndX > 50 && currentIndex < steps - 1) currentIndex++;
+            else if (tEndX - tStartX > 50 && currentIndex > 0) currentIndex--;
             updateCasesCarousel();
-        }
-    }, 6000);
+        }, {passive: true});
 
-    // Pausar ao interagir (Mouse ou Touch)
-    casesTrack.addEventListener('mouseenter', () => isPaused = true);
-    casesTrack.addEventListener('mouseleave', () => isPaused = false);
-    casesTrack.addEventListener('touchstart', () => isPaused = true);
+        setInterval(() => {
+            if (!isPaused) {
+                currentIndex = (currentIndex + 1) % (cards.length - getItemsPerView() + 1);
+                updateCasesCarousel();
+            }
+        }, 6000);
 
-    window.addEventListener('resize', () => {
-        currentIndex = 0; // Reseta ao mudar tela para evitar erros de cálculo
+        casesTrack.addEventListener('mouseenter', () => isPaused = true);
+        casesTrack.addEventListener('mouseleave', () => isPaused = false);
+        window.addEventListener('resize', () => { currentIndex = 0; setupCasesDots(); updateCasesCarousel(); });
         setupCasesDots();
-        updateCasesCarousel();
-    });
+    }
 
-    // Inicialização
-    setupCasesDots();
-}
-
-// --- 4. CARROSSEL DE CERTIFICAÇÕES (sobre.html / certificações) ---
+    // --- 4. CARROSSEL DE CERTIFICAÇÕES (sobre.html) ---
     const certTrack = document.getElementById('certGrid');
-    const certDotsContainer = document.getElementById('certDots');
+    const certDotsNav = document.getElementById('certDots');
 
-    if (certTrack && certDotsContainer) {
+    if (certTrack && certDotsNav) {
         const certs = Array.from(certTrack.children);
         let certIndex = 0;
         let certPaused = false;
-        let certAutoPlay;
-
-        function getCertItemsPerView() {
-            return window.innerWidth <= 992 ? 1 : 3; // 1 no mobile, 3 no desktop (ajuste conforme seu grid)
-        }
+        let cTouchStartX = 0;
+        let cTouchEndX = 0;
 
         function setupCertDots() {
-            certDotsContainer.innerHTML = '';
-            // No mobile, criamos um ponto para cada certificado
+            certDotsNav.innerHTML = '';
             if (window.innerWidth <= 992) {
                 certs.forEach((_, i) => {
                     const dot = document.createElement('div');
                     dot.classList.add('dot');
                     if (i === 0) dot.classList.add('active');
-                    dot.addEventListener('click', () => {
-                        certIndex = i;
-                        updateCertCarousel();
-                        certPaused = true; // Pausa ao interagir manualmente
-                    });
-                    certDotsContainer.appendChild(dot);
+                    dot.addEventListener('click', () => { certIndex = i; updateCertCarousel(); certPaused = true; });
+                    certDotsNav.appendChild(dot);
                 });
             }
         }
 
         function updateCertCarousel() {
             if (window.innerWidth <= 992) {
-                // No mobile, move 100% (um card por vez)
                 certTrack.style.transform = `translateX(-${certIndex * 100}%)`;
-                
-                // Atualiza dots
-                const dots = certDotsContainer.querySelectorAll('.dot');
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === certIndex);
-                });
+                const dots = certDotsNav.querySelectorAll('.dot');
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === certIndex));
             } else {
-                // No desktop, remove o transform para manter o grid padrão
                 certTrack.style.transform = 'none';
             }
         }
 
-        // Função de Auto-play para Certificações
-        function startCertAutoPlay() {
-            clearInterval(certAutoPlay);
-            certAutoPlay = setInterval(() => {
-                if (!certPaused && window.innerWidth <= 992) {
-                    certIndex = (certIndex + 1) % certs.length;
-                    updateCertCarousel();
-                }
-            }, 4000); // Passa a cada 4 segundos
-        }
+        // Swipe para Certificações
+        certTrack.addEventListener('touchstart', e => { cTouchStartX = e.changedTouches[0].screenX; certPaused = true; }, {passive: true});
+        certTrack.addEventListener('touchend', e => {
+            cTouchEndX = e.changedTouches[0].screenX;
+            if (cTouchStartX - cTouchEndX > 50 && certIndex < certs.length - 1) certIndex++;
+            else if (cTouchEndX - cTouchStartX > 50 && certIndex > 0) certIndex--;
+            updateCertCarousel();
+        }, {passive: true});
 
-        // Eventos para pausar (Mouse e Touch)
-        certTrack.addEventListener('touchstart', () => certPaused = true);
+        setInterval(() => {
+            if (!certPaused && window.innerWidth <= 992) {
+                certIndex = (certIndex + 1) % certs.length;
+                updateCertCarousel();
+            }
+        }, 4000);
+
         certTrack.addEventListener('mouseenter', () => certPaused = true);
         certTrack.addEventListener('mouseleave', () => certPaused = false);
-
-        window.addEventListener('resize', () => {
-            certIndex = 0;
-            setupCertDots();
-            updateCertCarousel();
-        });
-
-        // Inicialização
+        window.addEventListener('resize', () => { certIndex = 0; setupCertDots(); updateCertCarousel(); });
         setupCertDots();
-        startCertAutoPlay();
     }
-
 });
-
-
-
