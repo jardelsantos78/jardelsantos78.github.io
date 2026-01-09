@@ -182,6 +182,7 @@ header {
     transition: transform 0.5s ease-in-out;
 }
 
+/* Estilo Base (Desktop) */
 .slide {
     min-width: 100%;
     display: flex;
@@ -201,12 +202,40 @@ header {
 
 .slide-image {
     flex: 1;
+    display: flex;
+    justify-content: center; /* Garante centralização horizontal do container da imagem */
 }
 
 .slide-image img {
     border-radius: 4px;
-    width: 80%; /* reduz em 80% */
-    height: auto; /* mantém proporção */
+    width: 100%; /* No desktop ocupa o espaço do flex:1 */
+    max-width: 500px; /* Evita que a imagem fique gigante em telas muito largas */
+    height: auto;
+}
+
+/* Ajustes para Mobile (Telas até 768px) */
+@media (max-width: 768px) {
+    .slide {
+        flex-direction: column; /* Empilha os elementos verticalmente */
+        text-align: center;      /* Centraliza o texto para um visual melhor no mobile */
+        padding: 40px 5%;       /* Reduz o padding lateral para ganhar espaço */
+        gap: 30px;
+    }
+
+    .slide-content {
+        order: 1; /* Garante que o texto venha primeiro */
+    }
+
+    .slide-image {
+        order: 2; /* Garante que a imagem venha abaixo do texto */
+        width: 100%;
+    }
+
+    .slide-image img {
+        width: 95%;  /* Aumenta o tamanho da imagem no mobile para destaque */
+        max-width: 350px; /* Limita o tamanho para não estourar */
+        margin: 0 auto;   /* Centraliza a imagem propriamente dita */
+    }
 }
 
 .carousel-btn {
@@ -244,6 +273,7 @@ header {
 
 .dot.active {
     background-color: white;
+	transform: scale(1.5);
 }
 
 /* ==========================================================================
@@ -313,18 +343,44 @@ header {
 
 .service-img {
     flex: 1;
-    max-width: 400px; /* Limita largura da imagem */
+    max-width: 600px; /* Limita largura da imagem */
 }
         
 .service-img img {
     width: 100%;
-    border-radius: 4px;
+    border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 		
 .service-text {
     flex: 1.5;
 }
+/* ==========================================================================
+   AJUSTE MOBILE – IMAGENS DOS SERVIÇOS
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+  .service-item {
+    flex-direction: column;
+  }
+
+  .service-img {
+    width: 100%;
+    max-height: 350px;
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+
+  .service-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
 
 /* ==========================================================================
    6. PÁGINA SOBRE (SOBRE.HTML)
@@ -338,14 +394,14 @@ header {
 
 .about-header {
     text-align: center;
-    margin-bottom: 60px;
+    /*margin-bottom: 10px;*/
 }
 
 .underline {
     width: 80px;
     height: 4px;
     background-color: var(--accent-blue);
-    margin: 10px auto;
+    margin: 0 auto 30px auto !important; /* O '0' no início reduz o espaço acima */
 }
 
 .about-text-full p {
@@ -359,13 +415,24 @@ header {
 .about-text-full strong { color: var(--accent-blue); }
 
 .certifications-section {
-    padding: 40px 5%;
-    background-color: var(--bg-darker);
+    padding: 0px 5%;
+    background-color: transparent; /* Remove qualquer fundo escuro da seção */
+}
+
+.certifications-carousel-container {
+    overflow: hidden; /* Esconde os certificados que estão fora da tela */
+    width: 100%;
+}
+
+.certifications-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    gap: 20px;
 }
 
 .section-title {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 10px !important; /* Diminui a distância para o underline */
     font-size: 2rem;
 }
 
@@ -441,11 +508,31 @@ header {
     }
 
     .mobile-only p {
-        text-align: justify; /* Opcional: alinhamento à esquerda costuma ler melhor no mobile */
+        text-align: left; /* Opcional: alinhamento à esquerda costuma ler melhor no mobile */
         font-size: 1rem;
         line-height: 1.6;
         margin-bottom: 15px;
     }
+	
+	.about-text-full p {
+	   text-align: left;
+	}
+}
+.certifications-track {
+    gap: 0; /* Remove gap para o cálculo de 100% ser exato */
+}
+
+.cert-card {
+    flex: 0 0 100% !important; /* Exibe exatamente um por vez */
+    min-width: 100%;
+    box-shadow: none; /* Opcional: simplifica o visual no mobile */
+}
+    
+.certifications-section .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
 }
 
 /* ==========================================================================
@@ -692,29 +779,73 @@ header {
         text-align: center;
     }
 
-    /* Ajustes para o Slider de Certificações no Mobile */
-    .certifications-grid {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        gap: 20px;
-        padding-bottom: 20px;
-        scrollbar-width: none; /* Firefox */
-    }
-
-    .certifications-grid::-webkit-scrollbar {
-        display: none; /* Chrome/Safari */
-    }
-
-    .cert-card {
-        min-width: 85%;
-        scroll-snap-align: center;
-    }
-
     .cert-dots {
         display: flex;
+	
     }
 }
+
+/* 1. O container precisa de um respiro interno para não cortar o efeito de hover e os dots */
+.certifications-container {
+    overflow: hidden !important; 
+    width: 100%;
+    position: relative;
+    display: block;
+    /* Adicionamos padding no topo e na base para o card e os dots 'respirarem' */
+    padding: 30px 0 60px 0 !important; 
+}
+
+/* 2. O trilho onde os cards deslizam */
+#certGrid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    /* Removemos margens que podem estar deslocando o grid */
+    margin: 0 !important; 
+}
+
+/* 3. Ajuste nos Dots para garantir que fiquem visíveis abaixo do card */
+.cert-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    position: absolute; /* Fixa os dots em relação ao container pai */
+    bottom: 20px;       /* Distância do fundo da seção */
+    left: 0;
+    right: 0;
+    z-index: 10;
+}
+
+/* 4. O Card no Mobile: precisa ser 100% da largura do pai e não encolher */
+@media (max-width: 992px) {
+    .cert-card {
+        flex: 0 0 100% !important; /* O primeiro 0 impede de crescer, o segundo 0 impede de encolher */
+        min-width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-sizing: border-box;
+    }
+    
+    #certGrid {
+        gap: 0 !important; /* No mobile, gap zero é vital para o cálculo de 100% */
+    }
+}
+
+/* 5. O Card no Desktop: volta a exibir 3 por vez */
+@media (min-width: 993px) {
+    #certGrid {
+        flex-wrap: wrap !important; /* No PC ele pode quebrar linha para fazer a grade */
+        gap: 20px;
+        transform: none !important; /* Cancela qualquer movimento do JS no desktop */
+    }
+    
+    .cert-card {
+        flex: 0 0 calc(33.333% - 14px) !important;
+        min-width: auto !important;
+    }
+}
+
 
 /* ==========================================================================
    8. Estilos específicos para a Vitrine de Artigos
@@ -1052,10 +1183,553 @@ header {
     transform: translateX(5px);
 }
 
-/* Ajuste para dispositivos móveis */
-@media (max-width: 992px) {
-    .cases-grid { grid-template-columns: repeat(2, 1fr); }
+/* Organização da Grid Principal */
+.cases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    align-items: stretch; /* Garante que todos os cards tenham a mesma altura */
 }
+
+/* Estrutura Interna do Card */
+.case-card {
+    display: flex;
+    flex-direction: column; /* Organiza conteúdo em vertical */
+
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    height: 100%;
+}
+
+.case-body {
+    flex-grow: 1; /* Faz esta parte ocupar o espaço necessário para empurrar a lista */
+    margin-bottom: 20px;
+}
+
+.case-body h3 {
+    min-height: 3em; /* Alinha o início do texto abaixo do título */
+    margin-bottom: 10px;
+}
+
+/* Alinhamento da Lista como Tabela */
+.case-results {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #eee; /* Linha sutil para separar */
+    padding-top: 20px;
+}
+
+.case-results li {
+    display: grid;
+    grid-template-columns: 25px 1fr; /* Coluna fixa para o ícone e outra para o texto */
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.case-results i {
+    color: #28a745;
+    margin-top: 4px;
+}
+
+/* Ajuste Responsivo (Mobile) */
+@media (max-width: 992px) {
+    .cases-grid {
+        grid-template-columns: 1fr; /* Uma coluna por linha no mobile */
+        padding: 0 15px;
+    }
+    
+    .case-card {
+        max-width: 500px;
+        margin: 0 auto; /* Centraliza o card na tela */
+    }
+}
+
+/* ========================================================================== 
+   SEÇÃO SERVIÇOS – MICRO-BLOCOS DE PROVA (MODELO 1)
+   ========================================================================== */
+
+.services-section {
+    padding: 60px 5%;
+    background-color: var(--bg-dark);
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Card de Serviço */
+.service-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent-blue);
+}
+
+/* Título do Serviço */
+.service-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+    color: var(--text-white);
+}
+
+/* Texto descritivo */
+.service-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-gray);
+    margin-bottom: 20px;
+}
+
+/* Micro-bloco de prova */
+.service-proof {
+    margin-top: auto;
+    padding: 16px 18px;
+    background: rgba(0, 123, 255, 0.08);
+    border-left: 4px solid var(--accent-blue);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-white);
+}
+
+.service-proof strong {
+    color: var(--text-white);
+    font-weight: 600;
+}
+
+/* Link do micro-bloco */
+.service-proof a {
+    display: inline-block;
+    margin-top: 8px;
+    font-weight: 600;
+    color: var(--accent-blue);
+    transition: opacity 0.2s ease;
+}
+
+.service-proof a:hover {
+    opacity: 0.85;
+}
+
+/* Responsivo */
 @media (max-width: 768px) {
-    .cases-grid { grid-template-columns: 1fr; }
+    .services-section {
+        padding: 50px 20px;
+    }
+
+    .service-card {
+        padding: 25px;
+    }
+
+    .service-card h3 {
+        font-size: 1.15rem;
+    }
+}
+
+
+
+
+/* ========================================================================== 
+   SEÇÃO RESULTADOS E CASOS DE SUCESSO
+   ========================================================================== */
+.cases-carousel-container {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    padding: 20px 0;
+}
+
+.cases-track {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 20px; /* Gap fixo para o JS calcular corretamente */
+    will-change: transform;
+}
+
+/* Desktop: 3 cards visíveis */
+.cases-section .case-card {
+    flex: 0 0 calc(33.333% - 13.4px); /* (100% / 3) menos a compensação do gap */
+    min-width: calc(33.333% - 13.4px);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Mobile: 1 card visível */
+/* Ajuste na Seção de Casos para Mobile */
+@media (max-width: 992px) {
+    .cases-carousel-container {
+        padding: 10px 0; /* Ajuste sutil */
+    }
+
+    .cases-track {
+        gap: 0 !important; /* Remove o espaço entre cards para não vazar o próximo */
+        display: flex;
+    }
+
+    .cases-section .case-card {
+        flex: 0 0 100% !important; /* Força o card a ter 100% da largura do container */
+        min-width: 100% !important;
+        margin: 0;
+        box-sizing: border-box; /* Garante que o padding não aumente o tamanho do card */
+    }
+}
+
+/* --- ESTILO BASE PARA TODOS OS DOTS --- */
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* --- DOTS DO CARROSSEL PRINCIPAL (HERO) --- */
+/* Mantemos o seu original que usa position absolute */
+.hero .carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.hero .dot {
+    background-color: #555;
+}
+
+.hero .dot.active {
+    background-color: white;
+	
+}
+
+/* --- DOTS DA SEÇÃO DE CASOS DE SUCESSO --- */
+/* Aqui eles ficam abaixo dos cards, sem posição absoluta */
+.cases-section .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px; /* Espaço entre os cards e os pontos */
+    position: relative; /* Diferente do hero, ele não flutua sobre a imagem */
+}
+
+/* Estilo padrão do Dot */
+.cases-section .dot {
+    width: 12px;
+    height: 12px;
+    background-color: #555;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Transição suave para a mudança de estado */
+    transform: scale(1); /* Tamanho normal */
+}
+
+/* Estilo do Dot ATIVO (Fixado) */
+.cases-section .dot.active {
+    background-color: white; /* branco de destaque */
+    transform: scale(1.5);    /* Fica permanentemente maior enquanto tiver a classe .active */
+    opacity: 1;
+}
+
+/* Responsividade Mobile */
+@media (max-width: 768px) {
+    .case-card {
+        flex: 0 0 100%; /* 1 por vez no Mobile */
+        min-width: 100%;
+    }
+    .cases-track {
+        gap: 0;
+    }
+}
+
+
+
+
+/* ==========================================================================
+   AJUSTE MOBILE – SEÇÃO SOLUÇÕES
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+  /* Seção ocupa toda a largura */
+  .services {
+    width: 100%;
+    padding: 10px 25px;
+  }
+
+  /* Cabeçalho mais confortável no mobile */
+  .services-header {
+    max-width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .services-header h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  .services-header p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  /* Cada item vira layout vertical */
+  .service-item {
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  /* Container da imagem com destaque real */
+  .service-img {
+    width: 100%;
+    height: 240px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .service-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Texto ocupa toda a largura */
+  .service-text {
+    width: 100%;
+    padding: 0;
+    text-align: left;
+  }
+
+  .service-text h3 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+  }
+
+  .service-text p {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  .service-text {
+    order: 1;
+  }
+
+  .service-img {
+    order: 2;
+  }
+}
+
+/* Estilo Moderno para Serviços */
+.services-modern-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.service-card-modern {
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border-bottom: 4px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.service-card-modern:hover {
+    transform: translateY(-10px);
+    border-bottom: 4px gradient #110964;
+}
+
+.service-icon {
+    font-size: 40px;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.service-list-minimal {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.service-list-minimal li {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.service-list-minimal li::before {
+    content: "✓";
+    color: #28a745;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+/* Hero e CTA */
+.services-hero { text-align: center; padding: 60px 0; }
+.cta-section-simple { text-align: center; padding: 60px 0; background: #002d5b; color: #fff; }
+.btn-primary { 
+    display: inline-block; 
+    padding: 15px 30px; 
+    background: #007bff; 
+    color: #fff; 
+    border-radius: 5px; 
+    text-decoration: none; 
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+
+/* --- SERVICES PAGE REFRESH --- */
+
+.services-hero {
+    padding: 60px 0 70px;
+    text-align: center;
+}
+
+.badge {
+    background: #007bff;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.services-modern-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin: -50px 0 60px; /* Faz os cards "subirem" sobre o hero */
+}
+
+.service-card-modern {
+    padding: 45px 30px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.07);
+    transition: transform 0.3s ease;
+    border-top: 5px solid #eee;
+}
+
+.service-card-modern.highlight {
+    border-top: 5px solid #007bff;
+}
+
+.service-card-modern:hover {
+    transform: translateY(-10px);
+}
+
+.service-icon {
+    font-size: 45px;
+    color: #007bff;
+    margin-bottom: 25px;
+}
+
+.service-list-minimal {
+    list-style: none;
+    padding: 0;
+    margin-top: 25px;
+    text-align: left;
+}
+
+.service-list-minimal li {
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 0.95rem;
+}
+
+.service-list-minimal li::before {
+    content: "→";
+    color: #007bff;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+/* Features e CTA */
+.features-section { padding: 0; text-align: center; }
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-top: 40px; margin-bottom: 15px;}
+.feature-item i { font-size: 30px; color: #28a745; margin-bottom: 15px; }
+
+.cta-final { background: #002d5b; color: #fff; padding: 40px 0; text-align: center; }
+.cta-button { 
+    display: inline-block; 
+    background: #25d366; 
+    color: #fff; 
+    padding: 18px 35px; 
+    border-radius: 50px; 
+    font-weight: bold; 
+    text-decoration: none;
+    margin-top: 25px;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+/* Se os textos dos cards de serviço ainda estiverem cinza e você quiser brancos: */
+.service-card-modern p, 
+.service-list-minimal li {
+    color: #ffffff;
+}
+/* Se as seções Hero ou CTA estiverem fora do container principal, adicione: */
+section {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+@media (min-width: 992px) {
+    section {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+
+/* Ajuste de Segurança para Mobile (Telas até 992px) */
+@media (max-width: 992px) {
+    
+    /* Força o respiro lateral em todas as seções do corpo do site */
+    .services-hero, 
+    .services-modern-section, 
+    .features-section, 
+    .cta-final {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        box-sizing: border-box; /* Garante que o padding não aumente a largura total */
+    }
+
+    /* Garante que o container não force uma largura maior que a tela */
+    .container {
+        width: 100% !important;
+        padding-left: 0 !important; /* Já demos o padding na section acima */
+        padding-right: 0 !important;
+        margin: 0 auto;
+    }
+
+    /* Centralização e ajuste do título no mobile */
+    .services-hero h1 {
+        font-size: 1.8rem; /* Diminui um pouco para não quebrar feio em telas pequenas */
+        line-height: 1.3;
+    }
 }
