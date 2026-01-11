@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Cibersegurança para PMEs: Proteção e LGPD | Jardel Santos</title>
+    <meta name="description" content="Aprenda como proteger sua pequena ou média empresa com ferramentas open-source, estratégias de backup e conformidade com a LGPD.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fas fa-user-shield" style="color:#007bff; font-size: 30px;"></i>
+            <span>Jardel Santos</span>
+        </div>
+        <nav>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html">Início</a></li>
+                <li><a href="../servicos.html">Serviços</a></li>
+                <li><a href="../sobre.html">Sobre mim</a></li>
+                <li><a href="../artigos.html">Artigos</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+    </header>
+
+    <main class="about-container" id="artigo">
+        <div class="about-header" style="text-align: left;">
+            <a href="../artigos.html" style="color: var(--accent-blue); font-size: 0.9rem;"><i class="fas fa-arrow-left"></i> Voltar para Artigos</a>
+            <h1 style="margin-top: 20px;">Guia Definitivo de Cibersegurança para Pequenas Empresas: Proteção de Elite sem Estourar o Caixa</h1>
+            <div class="underline" style="margin: 20px 0;"></div>
+            <p style="color: var(--text-gray); font-size: 0.9rem;"><i class="far fa-calendar-alt"></i> Publicado em: 11 de Janeiro de 2026 | <i class="far fa-clock"></i> 10 min de leitura</p>
+        </div>
+
+        <img src="../img/small-business-cib.webp" alt="Cibersegurança e Proteção de Dados" class="article-banner">
+
+        
+		<article class="article-body">
+		<button class="btn-print" onclick="window.print()">
+		  🖨️ Imprimir artigo
+		</button>
+
+		  <!-- Hero/intro curta -->
+		  <p>2025 consolidou o ransomware e o vazamento de dados como riscos <strong>existenciais</strong> para micro e pequenas empresas (MPEs). No Brasil, os ataques <strong>cresceram 25%</strong> no 1º semestre (3.617 incidentes; pico de 943 em fevereiro). Globalmente, <strong>58%</strong> das organizações atingidas por ransomware precisaram <strong>suspender operações</strong> – um custo que poucas MPEs suportam.<br>
+
+			<cite class="cite--sep-slash" data-prefix="true">
+			  <a href="https://canaltech.com.br/seguranca/ataques-de-ransomware-crescem-25-no-1o-semestre-de-2025/" target="_blank" rel="noopener">Canaltech</a>
+			  <a href="https://www.globenewswire.com/news-release/2025/01/28/3016416/0/en/Illumio-Research-Reveals-58-of-Companies-Hit-With-Ransomware-Have-Been-Forced-to-Halt-Operations.html" target="_blank" rel="noopener">GlobeNewswire</a>
+			</cite></p>
+
+		  <h2>Por que MPEs precisam agir (agora)</h2>
+		  <p>
+			<strong>Segurança</strong> não é “assunto de TI”: é <strong>risco de negócio</strong>. Em 2025, levantamentos mostram que  <strong>1 em 5</strong> MPEs correram o risco de <strong>fechar definitivamente</strong> após um ataque bem-sucedido. No Brasil, a escalada envolve grupos ativos (Clop, Akira, Qilin) e setores como <strong>saúde</strong> e <strong>serviços</strong> entre os mais visados.<br>
+			
+			<cite class="cite--sep-slash" data-prefix="true">
+			  <a href="https://www.cfodive.com/news/smbs-risk-shutting-down-cyberattack-ai-cybersecurity/743405/" target="_blank" rel="noopener">CFO Dive</a>
+			  <a href="https://canaltech.com.br/seguranca/ataques-de-ransomware-crescem-25-no-1o-semestre-de-2025/" target="_blank" rel="noopener">Canaltech</a>
+			</cite></p>
+
+		  <h2>Casos reais de 2025: o que teria evitado ou reduzido o impacto</h2>
+
+		  <!-- Caso 1: Arcus Media / PMEs Brasil -->
+		  <div class="danger-box" style="border-left: 5px solid #d9534f; padding: 25px; border-radius: 8px; margin: 20px 0;">
+			<h4 style="color:#d9534f; margin-bottom: 12px;">
+			  <i class="fas fa-biohazard" style="margin-right: 8px;"></i>
+			  Caso Brasil (jan/2025): PMEs sob ataque do grupo “Arcus Media”
+			</h4>
+			<p>
+			  Escalada de ataques <strong>exclusivamente no Brasil</strong> contra <strong>MPEs</strong>, com tática de <em>dupla extorsão</em> e <strong>disrupção da recuperação</strong>: exclusão de <em>cópias VSS</em>, desligamento de <strong>SQL/e-mail</strong> e limpeza de <strong>logs</strong>. <strong>21 empresas</strong> afetadas apenas em janeiro.
+			  <a href="https://www.cisoadvisor.com.br/novo-grupo-de-ransomware-ataca-apenas-no-brasil/" target="_blank" rel="noopener">Fonte (CISO Advisor / Blockbit CTI)</a>
+			</p>
+			<ul>
+			  <li><strong>Evitar/mitigar com mínimo viável:</strong> <strong>Backup 3–2–1 imutável</strong> (WORM/Object Lock) + <strong>testes mensais</strong> (não depender de VSS); <strong>MFA</strong> em acessos administrativos; <strong>EDR</strong> (bloqueio comportamental de criptografia em massa); <strong>VLAN</strong> e <strong>telemetria</strong> básica.</li>
+			</ul>
+		  </div>
+
+		  <!-- Caso 2: MedicSolution / KillSec -->
+		  <div class="danger-box" style="border-left: 5px solid #d9534f; padding: 25px; border-radius: 8px; margin: 20px 0;">
+			<h4 style="color:#d9534f; margin-bottom: 12px;">
+			  <i class="fas fa-biohazard" style="margin-right: 8px;"></i>
+			  Caso Brasil (set/2025): Cadeia de saúde impactada (MedicSolution / KillSec)
+			</h4>
+			<p>
+			  Ataque com <strong>ameaça de vazamento</strong> contra a fornecedora SaaS <strong>MedicSolution</strong>, com exfiltração de <strong>~34&nbsp;GB</strong> (<strong>94.818</strong> arquivos) contendo exames, raios‑X e <strong>fotos sensíveis</strong> (inclusive de <strong>menores</strong>). Investigações apontam <strong>buckets AWS S3 mal configurados</strong>. Impacto cascata em clínicas/laboratórios como <em>Vita Exame</em>, <em>Clínica Espaço Vida</em>, <em>Centro Diagnóstico Toledo</em>, <em>Labclinic</em> e <em>Laboratório Álvaro</em>. 
+			  <a href="https://canaltech.com.br/seguranca/ataque-hacker-vaza-exames-e-fotos-de-pacientes-de-clinicas-no-brasil/" target="_blank" rel="noopener">Fonte 1</a> · 
+			  <a href="https://www.tecmundo.com.br/seguranca/407029-cibercriminosos-expoem-mais-de-94-mil-arquivos-medicos-de-brasileiros.htm" target="_blank" rel="noopener">Fonte 2</a>
+			</p>
+			<ul>
+			  <li><strong>Evitar/mitigar (pela MPE cliente):</strong> <strong>due‑diligence de fornecedores</strong> (criptografia, <strong>WORM</strong>, auditoria e <strong>notificação LGPD</strong>); <strong>criptografia na origem</strong> e <strong>minimização</strong> de dados no SaaS; <strong>plano de contingência</strong> com <strong>backup próprio</strong> e comunicação a pacientes/ANPD.</li>
+			</ul>
+		  </div>
+
+		  <!-- Caso 3: Westend Dental -->
+		  <div class="danger-box" style="border-left: 5px solid #d9534f; padding: 25px; border-radius: 8px; margin: 20px 0;">
+			<h4 style="color:#d9534f; margin-bottom: 12px;">
+			  <i class="fas fa-biohazard" style="margin-right: 8px;"></i>
+			  Clínicas odontológicas (jan/2025): acordo de US$ 350 mil após ransomware
+			</h4>
+			<p>
+			  A <strong>Westend Dental</strong> firmou <strong>acordo de US$ 350 mil</strong> por falhas de segurança e <strong>omissão</strong> de notificação após <strong>ransomware</strong> (com <strong>nota de resgate</strong> e <strong>criptografia total</strong>). Sem <em>forense</em> e sem comunicação a pacientes/reguladores por anos. 
+			  <a href="https://www.workplaceprivacyreport.com/2025/01/articles/data-breach-notification/patients-request-for-records-uncovers-dental-practices-ransomware-attack-leading-to-350k-settlement/" target="_blank" rel="noopener">Fonte 1</a> · 
+			  <a href="https://healthexec.com/topics/health-it/cybersecurity/dental-chain-involved-ransomware-coverup-fined-350k" target="_blank" rel="noopener">Fonte 2</a>
+			</p>
+			<ul>
+			  <li><strong>Evitar/mitigar:</strong> <strong>plano de resposta a incidentes</strong> (forense + notificação), <strong>backup 3–2–1 testado</strong>, <strong>EDR</strong> e <strong>treinamento anti‑phishing</strong> (vetor mais comum em clínicas).</li>
+			</ul>
+		  </div>
+
+		  <!-- Caso 4: KNP Logistics -->
+		  <div class="danger-box" style="border-left: 5px solid #d9534f; padding: 25px; border-radius: 8px; margin: 20px 0;">
+			<h4 style="color:#d9534f; margin-bottom: 12px;">
+			  <i class="fas fa-biohazard" style="margin-right: 8px;"></i>
+			  Colapso por credencial fraca (jul/2025): KNP Logistics (Reino Unido)
+			</h4>
+			<p>
+			  Empresa <strong>centenária</strong> encerrou operações após <strong>ransomware</strong> iniciado por <strong>senha fraca adivinhada</strong>; <strong>backups/DR destruídos</strong>, resgate estimado em <strong>~£5 milhões</strong> e <strong>~700 demissões</strong>. 
+			  <a href="https://www.tomshardware.com/tech-industry/cyber-security/158-year-old-company-forced-to-close-after-ransomware-attack-precipitated-by-a-single-guessed-password-700-jobs-lost-after-hackers-demand-unpayable-sum" target="_blank" rel="noopener">Fonte 1</a> · 
+			  <a href="https://petri.com/uk-logistics-firm-collapses-highlighting-cybersecurity-gaps/" target="_blank" rel="noopener">Fonte 2</a>
+			</p>
+			<ul>
+			  <li><strong>Evitar/mitigar:</strong> <strong>MFA obrigatório</strong> em acessos expostos; <strong>política de senhas fortes + lockout</strong>; <strong>backup imutável/off‑site</strong> (air‑gap) e <strong>testes regulares</strong>.</li>
+			</ul>
+		  </div>
+
+		  <!-- Imagem: Diagrama de rede segura -->
+
+		<section class="minimo-viavel">
+		  <h2>O “Mínimo Viável”: O que fazer, por que fazer e quanto custa</h2>
+		  <p>Segurança digital é <strong>investimento inteligente</strong> em continuidade e crescimento. A seguir, você encontra os pilares essenciais explicados de forma prática.</p>
+
+			<div class="pilar-item" style="margin-bottom:15px; padding:25px; border:1px solid #e1e8ed; border-radius:12px;">
+			  <h4 style="display:flex; align-items:center;">
+				<i class="fas fa-list" style="color: var(--accent-blue); margin-right:15px;"></i>
+				1. Inventário e Organização (Alicerce)
+			  </h4>
+
+			  <p><strong>O que é:</strong> O inventário é o “censo” da sua empresa: lista física e lógica de todos os ativos que precisam ser protegidos.</p>
+
+			  <p><strong>O que fazer:</strong></p>
+			  <ul style="margin-left:20px;">
+				<li>• Liste todos os dispositivos: PCs, notebooks, servidores, impressoras, roteadores e celulares corporativos.</li>
+				<li>• Mapeie softwares e versões, incluindo sistema operacional e aplicações críticas.</li>
+				<li>• Remova software pirata e isole sistemas sem suporte (ex.: Windows 7/8/Server sem patch).</li>
+			  </ul>
+			  <br>
+			  <p><i class="fas fa-dollar-sign" style="color: var(--accent-blue); margin-right:15px;"></i><strong>Diferencial econômico:</strong> você não precisa comprar um equipamento novo e caro. É possível reaproveitar um computador antigo ou criar uma máquina virtual para hospedar ferramentas gratuitas e profissionais, como <strong>OCS Inventory</strong> (inventário técnico automatizado), <strong>Snipe‑IT</strong> (gestão de patrimônio e licenças), <strong>Nmap/Zenmap</strong> (varredura e auditoria de rede) e <strong>GLPI</strong> (gestão de ativos e service‑desk, integrável com OCS para inventário automatizado). Todos são softwares de código aberto, amplamente utilizados e robustos.</p>
+
+			  <p><strong>Por que priorizar:</strong> Sem inventário você pode pagar por licenças desnecessárias, manter equipamentos vulneráveis ou não saber quem tinha acesso a dados em caso de incidente.</p>
+
+			  <p><strong>Estimativa de custo:</strong> <span style="color:#28a745; font-weight:bold;">R$ 0,00 de licença de software</span>. O custo será apenas de hardware (aprox. <strong>R$ 300 a R$ 800</strong> para um mini‑PC ou computador usado) e eventual serviço especializado para configuração inicial.</p>
+			<br>
+				<h4 style="display: flex; align-items: center;">
+					<i class="fas fa-key" style="color: var(--accent-blue); margin-right: 15px;"></i>
+					2. MFA (Autenticação de Dois Fatores)
+				</h4>
+				<p><strong>O que é:</strong> É uma camada extra de segurança. Além da sua senha comum, o sistema pede uma confirmação (geralmente um código) que chega no seu celular pessoal.</p>
+				<p><strong>Por que usar:</strong> Mesmo que um hacker descubra ou roube sua senha, ele não conseguirá entrar na sua conta sem o seu celular físico em mãos. Isso bloqueia 99% das tentativas de invasão.</p>
+				<p><strong>Estimativa de Custo:</strong> <span style="color: #28a745; font-weight: bold;">R$ 0,00 (Gratuito)</span>. Basta baixar aplicativos como o Microsoft Authenticator ou Google Authenticator.</p>
+<br>
+				<h4 style="display: flex; align-items: center;">
+					<i class="fas fa-cloud-upload-alt" style="color: var(--accent-blue); margin-right: 15px;"></i>
+					3. Backup 3–2–1 com Imutabilidade
+				</h4>
+				<p><strong>O que é:</strong> É a regra de ouro: 3 cópias dos dados, em 2 locais diferentes (ex: seu computador e um disco externo) e 1 cópia na nuvem que não pode ser apagada por ninguém (imutável).</p>
+				<p><strong>Por que usar:</strong> Em um ataque de Ransomware, os criminosos tentam apagar seus backups. A cópia imutável na nuvem garante que você recupere sua empresa sem precisar pagar resgate.</p>
+				<p><strong>Estimativa de Custo:</strong> <span style="color: #007bff; font-weight: bold;">R$ 50 a R$ 300/mês</span> (dependendo do volume de arquivos, usando serviços como Azure ou AWS).</p>
+
+				<i class="fas fa-database" style="color: var(--accent-blue); margin-right:15px;"></i>
+				Estimativa de Custo: Backup em Nuvem (Imutável)
+			  </h4>
+
+			  <p style="margin-top:10px;">Valores estimados por mês em reais (BRL). Custos variam conforme região, classe de armazenamento e taxas de recuperação.</p>
+
+			  <table style="width:100%; border-collapse:collapse; margin-top:12px;">
+				<thead>
+				  <tr style="background:#f7f9fb;">
+					<th style="text-align:left; padding:10px; border:1px solid #e9eef2;">Volume</th>
+					<th style="text-align:left; padding:10px; border:1px solid #e9eef2;">Azure Backup (estim.)</th>
+					<th style="text-align:left; padding:10px; border:1px solid #e9eef2;">AWS S3 Glacier (estim.)</th>
+					<th style="text-align:left; padding:10px; border:1px solid #e9eef2;">Wasabi (estim.)</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr>
+					<td style="padding:10px; border:1px solid #e9eef2;">500 GB</td>
+					<td style="padding:10px; border:1px solid #e9eef2;">R$ 40 – R$ 90</td>
+					<td style="padding:10px; border:1px solid #e9eef2;">R$ 20 – R$ 70</td>
+					<td style="padding:10px; border:1px solid #e9eef2;">R$ 20 – R$ 50</td>
+				  </tr>
+				  <tr>
+					<td style="padding:10px; border:1px solid #e9eef2;">1 TB</td>
+					<td style="padding:10px; border:1px solid #e9eef2;">R$ 70 – R$ 140</td>
+					<td style="padding:10px; border:1px solid #e9eef2;">R$ 40 – R$ 120</td>
+					<td style="padding:10px; border:1px solid #e9eef2;">R$ 35 – R$ 80</td>
+				  </tr>
+				  <tr>
+					<td style="padding:10px; border:1px solid #e9eef2;">2 TB</td>
+					<td style="padding:10px; border:1px solid #e9eef2;">R$ 120 – R$ 260</td>
+					<td style="padding:10px; border:1px solid #e9eef2;">R$ 80 – R$ 220</td>
+					<td style="padding:10px; border:1px solid #e9eef2;">R$ 70 – R$ 160</td>
+				  </tr>
+				</tbody>
+			  </table>
+
+			  <p style="margin-top:12px; font-size:0.95rem;">
+				<strong>Observações:</strong> 1) Valores são estimativas para PMEs e incluem apenas armazenamento; taxas de transferência/recuperação podem ser cobradas à parte. 2) Wasabi costuma oferecer preço fixo por TB sem taxas de egress em muitos planos, tornando-o previsível para restaurações. 3) Use as calculadoras oficiais dos provedores para orçar com precisão conforme sua região e padrão de uso.
+			  </p>
+<br>
+				<h4 style="display: flex; align-items: center;">
+					<i class="fas fa-user-shield" style="color: var(--accent-blue); margin-right: 15px;"></i>
+					4. EDR (O "Antivírus Inteligente")
+				</h4>
+				<p><strong>O que é:</strong> Diferente do antivírus comum, o EDR vigia o comportamento do computador. Se um programa tentar trancar todos os seus arquivos de uma vez, ele percebe a ação suspeita.</p>
+				<p><strong>Por que usar:</strong> Vírus novos são criados a cada segundo. O EDR identifica o ataque pelo que o vírus "faz" e não apenas pelo nome dele, travando a máquina infectada na hora.</p>
+				<p><strong>Estimativa de Custo:</strong> <span style="color: #007bff; font-weight: bold;">R$ 15 a R$ 45/mês por dispositivo</span> (licenças como Microsoft Defender for Business).</p>
+<br>
+				<h4 style="display: flex; align-items: center;">
+					<i class="fas fa-monument" style="color: var(--accent-blue); margin-right: 15px;"></i>
+					5. Firewall Dedicado (Porteiro de Rede)
+				</h4>
+				<p><strong>O que é:</strong> Um sistema que controla todo o tráfego de dados. Ao contrário do roteador básico da operadora, ele funciona como um "filtro inteligente" que decide exatamente o que pode entrar ou sair da sua rede.</p>
+				
+				<p><i class="fas fa-dollar-sign" style="color: var(--accent-blue); margin-right:15px;"></i><strong>Diferencial Econômico:</strong> Você não precisa comprar um equipamento novo e caro. É possível <strong>reaproveitar um computador antigo</strong> (que tenha duas placas de rede) e instalar sistemas gratuitos e profissionais como o <strong>pfSense</strong> ou <strong>OPNsense</strong>. Eles são softwares de código aberto, amplamente utilizados no mundo inteiro por sua extrema segurança e robustez.</p>
+				
+				
+
+				<p><strong>Por que usar:</strong> Com o pfSense ou OPNsense, você cria "zonas isoladas". Assim, mesmo que o celular de um cliente no Wi-Fi esteja infectado, o vírus fica preso naquela rede e não consegue chegar aos computadores onde estão seus sistemas financeiros e dados de clientes (LGPD).</p>
+				
+				<p><strong>Estimativa de Custo:</strong> 
+					<span style="color: #28a745; font-weight: bold;">R$ 0,00 de licença de software</span>. 
+					O custo será apenas de hardware (aprox. <strong>R$ 300 a R$ 800</strong> se for comprar um mini-PC ou usar um computador usado) + o serviço especializado para a configuração inicial.
+				</p>
+<br>
+				<h4 style="display: flex; align-items: center;">
+					<i class="fas fa-shield-alt" style="color: var(--accent-blue); margin-right: 15px;"></i>
+					6. IDS/IPS: O “Alarme” contra Invasões
+				</h4>
+				
+				<p><strong>O que é:</strong> Softwares como <strong>Suricata</strong> ou <strong>Snort</strong> funcionam como um sistema de alarme integrado ao firewall. 
+				Eles analisam o tráfego em tempo real e, se detectarem comportamento típico de ataque (como ransomware), 
+				podem cortar a conexão daquela máquina instantaneamente, antes que o estrago se espalhe.</p>
+				
+				<p><strong>Como usar:</strong> É possível começar em modo <strong>IDS</strong> (apenas alerta) e, após alguns dias de ajuste, 
+				migrar para <strong>IPS</strong> (bloqueio ativo) nas regras que apresentarem poucos falsos positivos.</p>
+				
+				<p><strong>Suricata (recomendado para MPEs):</strong></p>
+				<ul style="margin-left: 20px;">
+					<li>• Escala melhor em ambientes multi-core, suportando links rápidos sem sacrificar inspeção.</li>
+					<li>• Logs estruturados (EVE JSON) facilitam integração com SIEM e auditoria.</li>
+					<li>• Integração madura no <strong>OPNsense</strong> e disponível no <strong>pfSense</strong>.</li>
+					<li><em>Cenários ideais:</em> até ~100 usuários, necessidade de alto desempenho, uso de VLANs e múltiplas subinterfaces.</li>
+				</ul>
+				<br>
+				<p><strong>Snort (clássico e consolidado):</strong></p>
+				<ul style="margin-left: 20px;">
+					<li>• Base de regras extensa (Talos) e vasta documentação.</li>
+					<li>• Indicado para equipes que já dominam a sintaxe/ecossistema Snort.</li>
+					<li><em>Cenários ideais:</em> times com experiência prévia em Snort, hardware mais modesto ou necessidade de reaproveitar regras existentes.</li>
+				</ul>
+				<br>
+				<p><strong>Regra prática para MPEs:</strong> Se você não tem preferência prévia e <strong>busca simplicidade + desempenho</strong>, 
+				comece com <strong>Suricata</strong>.</p>
+				
+				<p><strong>Estimativa de Custo:</strong> 
+					<span style="color: #28a745; font-weight: bold;">R$ 0,00 de licença de software</span>. 
+					O custo será apenas de hardware adicional (se necessário) e tempo técnico para configuração inicial.
+				</p>
+<br>
+				<h4 style="display: flex; align-items: center;">
+					<i class="fas fa-graduation-cap" style="color: var(--accent-blue); margin-right: 15px;"></i>
+				   7. Treinamento e Cultura de Segurança
+				</h4>
+				<p><strong>O que é:</strong> Ensinar sua equipe a identificar golpes comuns, como boletos falsos ou links suspeitos no WhatsApp e e-mail.</p>
+				<p><strong>Por que usar:</strong> 80% dos ataques começam com um erro humano. Funcionários bem informados são a sua primeira e melhor linha de defesa.</p>
+				<p><strong>Estimativa de Custo:</strong> <span style="color: #28a745; font-weight: bold;">R$ 0,00 (Gratuito)</span>. Use os guias gratuitos do portal CERT.br.</p>
+			</div>
+		</section>
+
+		  <!-- Conclusão/CTA -->
+			<h2>Conclusão</h2>
+		<p>
+			Implementar segurança em micro e pequenas empresas é uma questão de prioridade e disciplina, não de orçamento infinito. Comece pelo que realmente reduz risco: <strong>inventário atualizado</strong>, <strong>MFA</strong>, <strong>backup 3‑2‑1 com cópia imutável e testes regulares</strong>, <strong>segmentação de rede com firewall dedicado</strong>, <strong>EDR ou monitoramento comportamental</strong> e <strong>treinamento contínuo da equipe</strong>. 
+		</p>
+		<p>
+			Valide cada etapa com testes práticos (restauração de backup, simulação de phishing, verificação de logs) e documente decisões para demonstrar diligência em conformidade com a LGPD. A prevenção custa uma fração do impacto de um incidente e transforma segurança em vantagem competitiva: menos tempo parado, menos perda de clientes e maior confiança do mercado.
+		</p>
+		<p>
+			Comece pelo inventário hoje, implemente o mínimo viável em 30 dias e evolua por prioridades de risco. 
+		</p>
+
+		  <!-- Box de CTA de serviços -->
+		  <div class="cta-box">
+			<h3>Sua empresa precisa de um plano de segurança?</h3>
+			<p>Implemento rapidamente o “mínimo viável” com checklist, runbooks e testes de restauração — aderente à LGPD.</p>
+			<a href="https://wa.me/5521995498872" class="btn" style="background: var(--accent-blue);">Entre em contato</a>
+		  </div>
+
+		  <!-- Fontes (rodapé do artigo) -->
+		  <div class="source-list">
+			<strong>📚 Fontes Consultadas:</strong>
+			<ul style="list-style:none; padding-left:0; margin-top:10px;">
+			  <li>• <a href="https://www.cisoadvisor.com.br/novo-grupo-de-ransomware-ataca-apenas-no-brasil/" target="_blank" rel="noopener">CISO Advisor / Blockbit CTI — Arcus Media</a></li>
+			  <li>• <a href="https://canaltech.com.br/seguranca/ataques-de-ransomware-crescem-25-no-1o-semestre-de-2025/" target="_blank" rel="noopener">Canaltech / ISH Tecnologia — Brasil H1 2025</a></li>
+			  <li>• <a href="https://canaltech.com.br/seguranca/ataque-hacker-vaza-exames-e-fotos-de-pacientes-de-clinicas-no-brasil/" target="_blank" rel="noopener">Canaltech — MedicSolution/KillSec</a> · <a href="https://www.tecmundo.com.br/seguranca/407029-cibercriminosos-expoem-mais-de-94-mil-arquivos-medicos-de-brasileiros.htm" target="_blank" rel="noopener">TecMundo</a></li>
+			  <li>• <a href="https://www.workplaceprivacyreport.com/2025/01/articles/data-breach-notification/patients-request-for-records-uncovers-dental-practices-ransomware-attack-leading-to-350k-settlement/" target="_blank" rel="noopener">Workplace Privacy Report — Westend Dental</a> · <a href="https://healthexec.com/topics/health-it/cybersecurity/dental-chain-involved-ransomware-coverup-fined-350k" target="_blank" rel="noopener">HealthExec</a></li>
+			  <li>• <a href="https://www.tomshardware.com/tech-industry/cyber-security/158-year-old-company-forced-to-close-after-ransomware-attack-precipitated-by-a-single-guessed-password-700-jobs-lost-after-hackers-demand-unpayable-sum" target="_blank" rel="noopener">Tom’s Hardware — KNP Logistics</a> · <a href="https://petri.com/uk-logistics-firm-collapses-highlighting-cybersecurity-gaps/" target="_blank" rel="noopener">Petri IT Knowledgebase</a></li>
+			  <li>• <a href="https://www.globenewswire.com/news-release/2025/01/28/3016416/0/en/Illumio-Research-Reveals-58-of-Companies-Hit-With-Ransomware-Have-Been-Forced-to-Halt-Operations.html" target="_blank" rel="noopener">Illumio / Ponemon — Paralisação pós-ransomware</a></li>
+			  <li>• <a href="https://docs.opnsense.org/manual/ips.html" target="_blank" rel="noopener">OPNsense — IDS/IPS (Suricata)</a> • <a href="https://adanews.ada.org/ada-news/2024/march/data-breaches-can-happen-to-any-person-business/" target="_blank" rel="noopener">ADA — riscos e boas práticas</a></li>
+			</ul>
+		  </div>
+
+		</article>
+
+
+    </main>
+
+ <footer class="site-footer">
+    
+    <div class="footer-top">
+        <div class="footer-container top-flex">
+            <span class="follow-text"> </span>
+            <div class="social-icons">
+                <a href="https://www.linkedin.com/in/jardel-santos-2012" target="_blank" title="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://wa.me/5521995498872" target="_blank" title="WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="mailto:jardelsantos.dpo@outlook.com.br" title="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-main">
+        <div class="footer-container main-grid">
+            
+            <div class="footer-col">
+                <h3>Navegue</h3>
+                <ul>
+                    <li><a href="../index.html">Início</a></li>
+                    <li><a href="../servicos.html">Serviços</a></li>
+                    <li><a href="../sobre.html">Sobre mim</a></li>
+                    <li><a href="../artigos.html">Artigos</a></li>
+                    
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Info</h3>
+                <ul class="contact-list">
+                    <li>
+                        <i class="fas fa-phone-alt"></i>
+                        <span>+55 21 99549-8872</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        <span>jardelsantos.dpo@outlook.com.br</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Rio de Janeiro, RJ</span>
+                    </li>
+                </ul>
+            </div>
+
+			<div class="footer-col">
+				<h3>Jardel Santos</h3>
+				<p class="footer-about">
+					<strong>DPO certificado pela EXIN.</strong> Especialista em Segurança da Informação, focado em proteger dados críticos e garantir a conformidade legal e continuidade do seu negócio com estratégias robustas.
+				</p>
+				<a href="../sobre.html#certGrid" class="linkedin-btn">
+					Ver Certificações <i class="fas fa-arrow-right"></i>
+				</a>
+			</div>
+
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <div class="footer-container bottom-flex">
+            <div class="legal-links">
+                <a href="#">Privacidade</a>
+                <a href="#">Termos de Uso</a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 Jardel Santos. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="../assets/js/script.js"></script>
+
+<button class="btn-print-floating" onclick="window.print()" title="Imprimir artigo">
+  🖨️
+</button>
+
+
+</body>
+</html>

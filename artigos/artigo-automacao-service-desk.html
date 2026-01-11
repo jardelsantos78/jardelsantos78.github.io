@@ -23,7 +23,6 @@
                 <li><a href="../servicos.html">Serviços</a></li>
                 <li><a href="../sobre.html">Sobre mim</a></li>
                 <li><a href="../artigos.html">Artigos</a></li>
-                <li><a href="#contato">Contato</a></li>
             </ul>
         </nav>
         <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
@@ -34,12 +33,15 @@
             <a href="../artigos.html" style="color: var(--accent-blue); font-size: 0.9rem;"><i class="fas fa-arrow-left"></i> Voltar para Artigos</a>
             <h1 style="margin-top: 20px; line-height: 1.3;">Automação de Service Desk: Estratégias para Reduzir Custos Operacionais em até 40%</h1>
             <div class="underline" style="margin: 20px 0;"></div>
-            <p style="color: var(--text-gray); font-size: 0.9rem;"><i class="far fa-calendar-alt"></i> Publicado em: 08 de Janeiro de 2026 | <i class="far fa-clock"></i> 7 min de leitura</p>
+            <p style="color: var(--text-gray); font-size: 0.9rem;"><i class="far fa-calendar-alt"></i> Publicado em: 11 de Janeiro de 2026 | <i class="far fa-clock"></i> 7 min de leitura</p>
         </div>
 
         <img src="../img/automacao-de-ti.webp" alt="Automação de TI" class="article-banner">
 
         <article class="article-body">
+		<button class="btn-print" onclick="window.print()">
+		  🖨️ Imprimir artigo
+		</button>
             <p>Automatizar tarefas simples no Service Desk pode reduzir custos operacionais em até <strong>40%</strong>, segundo estudos recentes. Ferramentas open-source e soluções internas, como portais intranet com scripts acessíveis ao usuário final, são estratégias eficazes e de baixo custo para empresas que buscam eficiência sem grandes investimentos.</p>
 
             <h2>🧠 Por que automatizar o Service Desk?</h2>
@@ -51,11 +53,49 @@
             <h3>1. Scripts de coleta de informações locais</h3>
             <p>Um dos gargalos mais comuns é o tempo gasto para obter dados básicos da máquina do usuário, como nome do host, IP, versão do sistema e status da rede.</p>
             
-            <div class="example-card">
-                <h4>📌 Exemplo Real e Prático</h4>
-                <p>Em uma empresa do setor financeiro, foi implementado um script <strong>PowerShell</strong> que coleta dados da máquina e os exibe em uma janela amigável. O usuário informa esses dados ao abrir o chamado, reduzindo o tempo de triagem em até <strong>70%</strong>.</p>
-                <p style="font-size: 0.9rem;"><em>Esta solução está documentada em: <a href="https://github.com/jardelsantos78/servicedesk" target="_blank" style="color: var(--accent-blue);">github.com/jardelsantos78/servicedesk</a>.</em></p>
-            </div>
+			<div class="example-card">
+			  <h4>📌 Exemplo Real e Prático</h4>
+
+			  <p>
+				Em uma empresa do setor financeiro, foi implementado um script em 
+				<strong>PowerShell</strong> que coleta <strong>exclusivamente informações técnicas do equipamento</strong>
+				(como nome da máquina, endereço IP, informações de rede e tempo desde a última reinicialização),
+				exibindo esses dados em uma interface simples e amigável.
+			  </p>
+
+			  <p>
+				<strong>Importante:</strong> a solução <u>não coleta dados pessoais do usuário</u>,
+				não acessa arquivos, histórico, credenciais ou qualquer informação sensível,
+				sendo utilizada <strong>unicamente para apoiar o Service Desk</strong> na identificação correta do equipamento
+				durante a abertura do chamado.
+			  </p>
+
+			  <p>
+				O ambiente contava com <strong>servidor Windows</strong> e <strong>SCCM</strong> para acesso remoto,
+				porém apresentava inconsistências de <strong>DNS reverso</strong>,
+				o que tornava o acesso remoto pelo nome da máquina <strong>não totalmente confiável</strong>.
+				Para evitar conexões indevidas a equipamentos incorretos,
+				o script passou a ser utilizado como mecanismo adicional de validação,
+				permitindo confirmar <strong>nome do host, IP e estado do equipamento</strong>
+				antes de qualquer acesso remoto.
+			  </p>
+
+			  <p>
+				Como resultado, o tempo de triagem foi reduzido em até <strong>70%</strong>,
+				ao mesmo tempo em que se aumentou a <strong>segurança operacional</strong>
+				e a confiabilidade no atendimento.
+			  </p>
+
+			  <p style="font-size: 0.9rem;">
+				<em>
+				  Esta solução está documentada em:
+				  <a href="https://github.com/jardelsantos-dpo/servicedesk" target="_blank" style="color: var(--accent-blue);">
+					github.com/jardelsantos-dpo/servicedesk
+				  </a>
+				</em>
+			  </p>
+			</div>
+
 
             <h3>2. Portal Intranet com Autoatendimento</h3>
             <p>Criar um portal interno permite que o próprio colaborador resolva problemas simples. Ferramentas como <strong>GLPI, OTRS e Zammad</strong> (open-source) permitem integrar esse portal ao sistema de chamados, registrando ações do usuário e reduzindo a intervenção humana em tarefas como:</p>
@@ -65,8 +105,43 @@
                 <li>- Verificação de status da VPN.</li>
             </ul>
 
-            <h3>3. Automação e Monitoramento Proativo</h3>
-            <p>Com ferramentas como <strong>Power Automate</strong> ou <strong>N8N</strong>, é possível criar fluxos que identificam o tipo de problema e coletam dados automaticamente. Além disso, o uso de <strong>Zabbix e Grafana</strong> permite detectar falhas antes que o usuário perceba, abrindo chamados preventivos se um servidor atingir 90% de CPU, por exemplo.</p>
+			<h3>3. Automação e Monitoramento Proativo</h3>
+
+			<p>
+			A automação deixou de ser apenas uma forma de ganhar agilidade e passou a ser um 
+			<strong>elemento estratégico na prevenção de incidentes</strong>. Com ferramentas como 
+			<strong>Power Automate</strong> ou <strong>n8n</strong>, é possível criar fluxos inteligentes 
+			que identificam o tipo de problema relatado, coletam informações técnicas automaticamente 
+			e já direcionam o chamado para a equipe adequada.
+			</p>
+
+			<p>
+			Na prática, esses fluxos podem coletar dados como nome do equipamento, endereço IP, tempo de 
+			atividade, usuário logado e categoria do incidente, reduzindo falhas humanas, eliminando 
+			retrabalho e acelerando a triagem inicial do Service Desk.
+			</p>
+
+			<p>
+			Complementando esse cenário, o uso de soluções de <strong>monitoramento proativo</strong>, como 
+			<strong>Zabbix</strong> integrado ao <strong>Grafana</strong>, permite identificar falhas antes 
+			mesmo que o usuário perceba qualquer impacto. Métricas como uso de CPU, memória, disco, 
+			disponibilidade de serviços e latência de rede são monitoradas continuamente.
+			</p>
+
+			<p>
+			Ao atingir limites críticos previamente definidos — como um servidor operando acima de 
+			<strong>90% de CPU</strong> ou com espaço em disco próximo do esgotamento — o sistema pode 
+			<strong>abrir automaticamente um chamado preventivo</strong>, notificar a equipe responsável 
+			e registrar evidências técnicas do incidente.
+			</p>
+
+			<p>
+			Essa abordagem transforma o modelo tradicional, reativo e baseado apenas em chamados de usuários, 
+			em um <strong>modelo proativo</strong>, no qual a TI atua de forma preventiva, reduzindo 
+			indisponibilidades, aumentando a confiabilidade do ambiente e melhorando significativamente a 
+			experiência do usuário final.
+			</p>
+
 
             <div class="impact-table-box">
                 <h3 style="color:#fff; margin-bottom:15px; border:none; padding:0;">💡 Benefícios Diretos Estimados</h3>
@@ -110,7 +185,7 @@
                 <a href="https://wa.me/5521995498872" target="_blank" title="WhatsApp">
                     <i class="fab fa-whatsapp"></i>
                 </a>
-                <a href="mailto:jardelsantos78@hotmail.com" title="Email">
+                <a href="mailto:jardelsantos.dpo@outlook.com.br" title="Email">
                     <i class="fas fa-envelope"></i>
                 </a>
             </div>
@@ -140,7 +215,7 @@
                     </li>
                     <li>
                         <i class="fas fa-envelope"></i>
-                        <span>jardelsantos78@hotmail.com</span>
+                        <span>jardelsantos.dpo@outlook.com.br</span>
                     </li>
                     <li>
                         <i class="fas fa-map-marker-alt"></i>
@@ -177,5 +252,8 @@
 
 <script src="../assets/js/script.js"></script>
 
+<button class="btn-print-floating" onclick="window.print()" title="Imprimir artigo">
+  🖨️
+</button>
 </body>
 </html>

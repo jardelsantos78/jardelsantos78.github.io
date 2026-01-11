@@ -1733,3 +1733,205 @@ section {
         line-height: 1.3;
     }
 }
+
+
+/* ---------- Fonte: bloco de citação/atribuição ---------- */
+
+/* Ajuste geral: funciona tanto inline quanto em bloco */
+cite {
+  /* Tipografia */
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--text-gray, #555);
+  font-style: normal;            /* cite não precisa ser itálico aqui */
+  font-weight: 500;
+
+  /* Espaçamento */
+  display: inline-block;         /* inline por padrão; vira bloco com .cite--block */
+  margin: 0.25rem 0;
+}
+
+/* Prefixo visual “Fontes:” antes do conteúdo, quando desejar automatizar */
+cite[data-prefix="true"]::before {
+  content: "Fontes: ";
+  color: var(--accent-blue, #0b5cad);
+  font-weight: 600;
+}
+
+/* Links dentro do cite */
+cite a {
+  color: var(--accent-blue, #0b5cad);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(11, 92, 173, 0.25);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+cite a:hover,
+cite a:focus {
+  color: color-mix(in oklab, var(--accent-blue, #0b5cad) 80%, #000);
+  border-color: currentColor;
+  text-decoration: none;
+  outline: none;
+}
+
+/* Separador “ / ” entre fontes quando preferir automatizar via CSS */
+cite.cite--sep-slash a + a::before {
+  content: " / ";
+  color: var(--text-gray, #666);
+  margin: 0 0.25rem;
+}
+
+/* Variante em bloco (para pé de página do artigo) */
+.cite--block {
+  display: block;
+  padding: 0.75rem 1rem;
+  background: rgba(11, 92, 173, 0.06);            /* leve destaque */
+  border-left: 4px solid var(--accent-blue, #0b5cad);
+  border-radius: 6px;
+  margin: 1rem 0;
+}
+
+/* Ícone opcional à esquerda na variante em bloco */
+.cite--block.cite--icon::before {
+  content: "🔗";
+  margin-right: 0.5rem;
+}
+
+/* Modo escuro (se seu tema usar .dark ou [data-theme="dark"]) */
+@media (prefers-color-scheme: dark) {
+  cite {
+    color: #cfd8dc;
+  }
+  .cite--block {
+    background: rgba(11, 92, 173, 0.12);
+    border-left-color: var(--accent-blue, #6aa3ff);
+  }
+  cite a {
+    color: var(--accent-blue, #6aa3ff);
+    border-bottom-color: rgba(106, 163, 255, 0.35);
+  }
+}
+
+/* BOTÃO IMPRIMIR */
+@media print {
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+  /* Remove elementos que não devem aparecer */
+  header,
+  nav,
+  footer,
+  cta-box,
+  .menu,
+  .dropdown,
+  .navbar,
+  .btn-print {
+    display: none !important;
+  }
+
+  /* Garante que só o artigo seja impresso */
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  #artigo {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+}
+@media print {
+
+  .pilar-item {
+    border: none !important;
+    border-radius: 0 !important;
+  }
+  .cta-box {
+    display: none !important;
+  }
+  .btn-print-floating {
+    display: none !important;
+  }
+  a[href*="artigos.html"] {
+    display: none !important;
+  }
+}
+.btn-print-floating {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #0b5ed7;
+  color: #fff;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,.2);
+  z-index: 9999;
+}
+
+.btn-print-floating:hover {
+  background: #084298;
+}
+
+.btn-print {
+  background: #0b5ed7;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-print:hover {
+  background: #084298;
+}
+.btn-print-floating {
+  display: none;
+}
+@media (max-width: 768px) {
+
+  .btn-print-floating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+
+    background: #0b5ed7;
+    color: #fff;
+    border: none;
+
+    font-size: 22px;
+    cursor: pointer;
+
+    box-shadow: 0 6px 18px rgba(0,0,0,.2);
+    z-index: 9999;
+  }
+
+}
+@media print {
+
+  h2 {
+    page-break-after: avoid;
+  }
+
+  h2 + p,
+  h2 + div,
+  h2 + section {
+    page-break-before: avoid;
+  }
+
+}
